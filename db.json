@@ -1,0 +1,138 @@
+{
+  "products": [
+    {
+      "products_name": "Dragon Fruit",
+      "price": "2000",
+      "create_at": "2024-10-28T10:33:24.054Z",
+      "id": "3"
+    },
+    {
+      "products_name": "Mango",
+      "price": "900",
+      "create_at": "2024-10-23T17:06:52.722Z",
+      "id": "5"
+    },
+    {
+      "products_name": "Banana",
+      "price": "800",
+      "create_at": "2024-10-23T17:11:46.809Z",
+      "id": "6"
+    },
+    {
+      "id": "afad",
+      "products_name": "phone",
+      "price": "10000",
+      "create_at": "2024-10-31T16:42:30.053Z"
+    }
+  ],
+  "vouchers": [
+    {
+      "id": "4a38",
+      "voucherId": "9S75kI2r",
+      "customerName": "Ye htet Aung",
+      "customerEmail": "yha15380@gmail.com",
+      "saleDate": "2024-10-29T06:23:05.170Z",
+      "date": "2024-10-29",
+      "records": [
+        {
+          "id": 1730182982122,
+          "product_name": "Mango",
+          "product_id": "5",
+          "price": "900",
+          "quantity": 4,
+          "create_at": "2024-10-29T06:23:02.122Z"
+        }
+      ],
+      "total": 3600,
+      "tax": 180,
+      "grand_total": 3780
+    },
+    {
+      "id": "5923",
+      "voucherId": "nbklu4zF",
+      "customerName": "Ye htet Aung01",
+      "customerEmail": "yha15380@gmail.com",
+      "saleDate": "2024-10-31T15:46:33.032Z",
+      "date": "2024-10-31",
+      "records": [
+        {
+          "id": 1730389582794,
+          "product_name": "Mango",
+          "product_id": "5",
+          "price": "900",
+          "quantity": 4,
+          "create_at": "2024-10-31T15:46:22.794Z"
+        },
+        {
+          "id": 1730389587072,
+          "product_name": "Dragon Fruit",
+          "product_id": "3",
+          "price": "2000",
+          "quantity": 3,
+          "create_at": "2024-10-31T15:46:27.072Z"
+        },
+        {
+          "id": 1730389591720,
+          "product_name": "Banana",
+          "product_id": "6",
+          "price": "800",
+          "quantity": 3,
+          "create_at": "2024-10-31T15:46:31.721Z"
+        }
+      ],
+      "total": 12000,
+      "tax": 600,
+      "grand_total": 12600
+    },
+    {
+      "id": "fdb7",
+      "voucherId": "Krdyk5MG",
+      "customerName": "nss",
+      "customerEmail": "ns@gmail.com",
+      "saleDate": "2024-10-31T16:43:23.687Z",
+      "date": "2024-10-31",
+      "records": [
+        {
+          "id": 1730392976775,
+          "product_name": "phone",
+          "product_id": "afad",
+          "price": "10000",
+          "quantity": 1,
+          "create_at": "2024-10-31T16:42:56.775Z"
+        },
+        {
+          "id": 1730392987049,
+          "product_name": "Banana",
+          "product_id": "6",
+          "price": "800",
+          "quantity": 2,
+          "create_at": "2024-10-31T16:43:07.049Z"
+        }
+      ],
+      "total": 11600,
+      "tax": 580,
+      "grand_total": 12180
+    },
+    {
+      "id": "15ad",
+      "voucherId": "m2J3koXf",
+      "customerName": "Ye htet Aung",
+      "customerEmail": "yha15380@gmail.com",
+      "saleDate": "2024-10-31T18:39:50.774Z",
+      "date": "2024-11-01",
+      "records": [
+        {
+          "id": 1730399988768,
+          "product_name": "Mango",
+          "product_id": "5",
+          "price": "900",
+          "quantity": 8,
+          "create_at": "2024-10-31T18:39:48.768Z"
+        }
+      ],
+      "total": 7200,
+      "tax": 360,
+      "grand_total": 7560
+    }
+  ]
+}
