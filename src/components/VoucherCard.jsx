@@ -30,7 +30,7 @@ const VoucherCard = () => {
     html2pdf()
       .set({
         margin: 0.5,
-        filename: `Voucher-${data?.voucherId}.pdf`,
+        filename: `Voucher-${data?.data?.voucher_id}.pdf`,
         image: { type: "jpeg", quality: 0.98 },
         html2canvas: { scale: 2 },
         jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
@@ -49,18 +49,18 @@ const VoucherCard = () => {
           <div className="flex justify-between items-start mb-8">
             <div>
               <h1 className="text-4xl font-bold mb-2">INVOICE</h1>
-              <p className="text-xl">{data?.voucherId}</p>
+              <p className="text-xl">{data?.data?.voucher_id}</p>
             </div>
             <div className="text-right border-l-2 border-gray-300 pl-5">
               <p className="font-bold">Invoice to</p>
-              <p>{data?.customerName}</p>
+              <p>{data?.data?.customer_name}</p>
               <p className="text-xs flex gap-2 print:gap-8">
                 <span>Date:</span>
-                <samp>{new Date(data?.saleDate).toLocaleDateString()}</samp>
+                <samp>{new Date(data?.data?.sale_date).toLocaleDateString()}</samp>
               </p>
               <p className="text-xs flex gap-2 print:gap-8">
                 <span>Time:</span>
-                <span>{new Date(data?.saleDate).toLocaleTimeString()}</span>
+                <span>{new Date(data?.data?.sale_date).toLocaleTimeString()}</span>
               </p>
             </div>
           </div>
@@ -76,14 +76,14 @@ const VoucherCard = () => {
               </tr>
             </thead>
             <tbody>
-              {data?.records?.map((record, index) => (
+              {data?.data?.records?.map((record, index) => (
                 <tr key={record.id} className="border-b border-gray-200">
                   <td className="py-2 text-sm">{index + 1}</td>
-                  <td className="py-2 text-sm">{record?.product_name}</td>
+                  <td className="py-2 text-sm">{record?.product.product_name}</td>
                   <td className="text-right py-2 text-sm">{record.quantity}</td>
-                  <td className="text-right py-2 text-sm">{record.price}</td>
+                  <td className="text-right py-2 text-sm">{record.product.price}</td>
                   <td className="text-right py-2 text-sm">
-                    {record.quantity * record.price}
+                    {record.quantity * record.product.price}
                   </td>
                 </tr>
               ))}
@@ -94,7 +94,7 @@ const VoucherCard = () => {
                   Total
                 </td>
                 <td className="py-2 text-right text-sm">
-                  {data?.total.toFixed(2)}
+                  {parseFloat(data?.data?.total).toFixed(2)}
                 </td>
               </tr>
               <tr className="border-b border-gray-200">
@@ -102,7 +102,7 @@ const VoucherCard = () => {
                   Tax
                 </td>
                 <td className="py-2 text-right text-sm">
-                  {data?.tax.toFixed(2)}
+                  {parseFloat(data?.data?.tax).toFixed(2)}
                 </td>
               </tr>
               <tr className="border-b border-gray-200">
@@ -110,7 +110,7 @@ const VoucherCard = () => {
                   Net Total
                 </td>
                 <td className="py-2 text-right text-sm">
-                  {data?.grand_total.toFixed(2)}
+                  {parseFloat(data?.data?.net_total).toFixed(2)}
                 </td>
               </tr>
             </tfoot>

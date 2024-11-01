@@ -8,6 +8,7 @@ import ProductRow from "./ProductRow";
 import { Link } from "react-router-dom";
 import { debounce } from "lodash";
 import { HiX } from "react-icons/hi";
+import Pagination from "./Pagination";
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 const ProductList = () => {
@@ -108,6 +109,14 @@ const ProductList = () => {
           )}
         </tbody>
       </table>
+
+      {!isLoading && (
+        <Pagination
+          links={data?.links}
+          meta={data?.meta}
+          updateFetchUrl={setFetchUrl}
+        />
+      )}
     </div>
   );
 };

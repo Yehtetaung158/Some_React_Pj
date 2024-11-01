@@ -16,13 +16,18 @@ const SaleForm = () => {
     // console.log(JSON.parse(data.current_product));
     if (data) {
       const current_product = JSON.parse(data.current_product);
+      console.log("data in self", data);
       addRecord({
-        id: Date.now(),
-        product_name: current_product.products_name,
         product_id: current_product.id,
-        price: current_product.price,
+        product: {
+          id: current_product.id,
+          product_name: current_product.product_name,
+          price: current_product.price,
+          created_at: new Date().toISOString(),
+        },
         quantity: parseInt(data.quantity),
-        create_at: new Date().toISOString(),
+        cost: parseInt(data.quantity) * parseInt(current_product.price),
+        created_at: new Date().toISOString(),
       });
     }
     reset();
@@ -38,6 +43,9 @@ const SaleForm = () => {
     `${import.meta.env.VITE_API_URL}/products`,
     fetcher
   );
+
+  if (isLoading) return <div>Loading...</div>;
+  // console.log(data)
 
   return (
     <form
@@ -64,13 +72,13 @@ const SaleForm = () => {
           {...register("current_product", { required: true })}
         >
           <option value="">Select Product</option>
-          {data?.map((product) => (
+          {data?.data?.map((product) => (
             <option
               key={product.id}
               name="prduct_id"
               value={JSON.stringify(product)}
             >
-              {product.products_name}
+              {product.product_name}
             </option>
           ))}
         </select>

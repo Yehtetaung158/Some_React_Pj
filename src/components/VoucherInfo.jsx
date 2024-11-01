@@ -53,29 +53,35 @@ const VoucherInfo = () => {
     formState: { errors },
   } = useForm();
 
-  const total = records.reduce((a, b) => a + b.price * b.quantity, 0);
+  const total = records.reduce((a, b) => a + b.cost, 0);
   const tax = total * 0.05;
   const grandTotal = total + tax;
 
+  console.log("records", records);
   const handleForm = async (data) => {
     setIsSending(true);
+    const currentVoucher = 
+      {
+        voucher_id: data.voucherId,
+        customer_name: data.customerName,
+        customer_email: data.customerEmail,
+        sale_date: data.saleDate,
+        all_correct: true,
+        records,
+        total:total,
+        tax:tax,
+        net_total: grandTotal,
+      }
+    console.log("I am currentVoucher",currentVoucher);
     const response = await fetch(import.meta.env.VITE_API_URL + "/vouchers", {
       method: "POST",
-      body: JSON.stringify({
-        voucherId: data.voucherId,
-        customerName: data.customerName,
-        customerEmail: data.customerEmail,
-        saleDate: new Date().toISOString(),
-        date: getCurrentDate(),
-        records,
-        total,
-        tax,
-        grand_total: grandTotal,
-      }),
+      body: JSON.stringify(currentVoucher),
       headers: {
         "Content-Type": "application/json",
+        "Accept": "application/json",
       },
     });
+    // console.log(response)
     setIsSending(false);
     if (response.status === 201) {
       reset();
@@ -254,7 +260,8 @@ const VoucherInfo = () => {
               <ProductEmptyState />
             </>
           ) : (
-            records.map((record, index) => (
+            records?.map((record, index) => (
+              // console.log(record.product.product_name)
               <tr
                 key={record.id}
                 className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 group "
@@ -264,9 +271,9 @@ const VoucherInfo = () => {
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
-                  {record.product_name}
+                  {record.product.product_name}
                 </th>
-                <td className="px-6 py-4">${record.price}</td>
+                <td className="px-6 py-4">${record.product.price}</td>
                 <td className="px-6 py-4 flex gap-2">
                   <button
                     onClick={() => decreaseQuantity(record.id, record.quantity)}
