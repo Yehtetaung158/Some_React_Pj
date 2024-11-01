@@ -9,6 +9,7 @@ import PuductEditLoader from "./PuductEditLoader";
 pulsar.register();
 
 const ProductEdit = ({ id }) => {
+  console.log(id)
   const notify = () => toast.success("Product Upadate is successfully");
   const [isSending, setIsSending] = useState(false);
   const nav = useNavigate();
@@ -26,11 +27,12 @@ const ProductEdit = ({ id }) => {
   );
 
   const handleForm = async (data) => {
+    console.log(data)
     setIsSending(true);
     await fetch(import.meta.env.VITE_API_URL + "/products/" + id, {
       method: "PUT",
       body: JSON.stringify({
-        products_name: data.products_name,
+        product_name: data.product_name,
         price: data.price,
         create_at: new Date().toISOString(),
       }),
@@ -70,34 +72,34 @@ const ProductEdit = ({ id }) => {
               <label
                 htmlFor="name"
                 className={` ${
-                  errors.products_name ? "text-red-500" : "text-gray-900"
+                  errors.product_name ? "text-red-500" : "text-gray-900"
                 } block mb-2 text-sm font-medium  dark:text-white`}
               >
                 Product Name
               </label>
               <input
-                {...register("products_name", {
+                {...register("product_name", {
                   required: true,
                   minLength: 3,
                   maxLength: 30,
                 })}
                 type="name"
-                id="products_name"
-                defaultValue={data?.products_name}
+                id="product_name"
+                defaultValue={data?.data?.product_name}
                 className={` ${
-                  errors.products_name
+                  errors.product_name
                     ? " border-red-500 focus:ring-red-500 focus:border-red-500 "
                     : " border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                 } bg-gray-50 border text-gray-900 text-sm rounded-lg  block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2"
           placeholder="Kyaw Kyaw`}
               />
-              {errors.products_name?.type === "required" && (
+              {errors.product_name?.type === "required" && (
                 <p className=" text-red-500 text-xs">First name is required</p>
               )}
-              {errors.products_name?.type === "minLength" && (
+              {errors.product_name?.type === "minLength" && (
                 <p className=" text-red-500 text-xs">Name must more than 3</p>
               )}
-              {errors.products_name?.type === "maxLength" && (
+              {errors.product_name?.type === "maxLength" && (
                 <p className=" text-red-500 text-xs">Name must lass then 30</p>
               )}
             </div>
@@ -111,7 +113,7 @@ const ProductEdit = ({ id }) => {
                 Price
               </label>
               <input
-                defaultValue={data?.price}
+                defaultValue={data?.data?.price}
                 {...register("price", { required: true, min: 100, max: 30000 })}
                 type="number"
                 id="price"

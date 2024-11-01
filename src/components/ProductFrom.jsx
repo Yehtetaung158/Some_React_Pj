@@ -22,7 +22,7 @@ const ProductFrom = () => {
     await fetch(import.meta.env.VITE_API_URL + "/products", {
       method: "POST",
       body: JSON.stringify({
-        products_name: data.products_name,
+        product_name: data.products_name,
         price: data.price,
         create_at: new Date().toISOString(),
       }),
