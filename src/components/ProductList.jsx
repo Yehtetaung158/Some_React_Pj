@@ -9,15 +9,23 @@ import { Link } from "react-router-dom";
 import { debounce } from "lodash";
 import { HiX } from "react-icons/hi";
 import Pagination from "./Pagination";
-const fetcher = (url) => fetch(url).then((res) => res.json());
+import { useCookies } from "react-cookie";
 
 const ProductList = () => {
+  const [token] = useCookies(["token"]);
+  console.log("token", token.token);
+  const fetcher = (url) =>
+    fetch(url, { headers: { Authorization: `Bearer ${token.token}` } }).then(
+      (res) => res.json()
+    );
   const serRef = useRef();
   const [fetchUrl, setFetchUrl] = useState(
     `${import.meta.env.VITE_API_URL}/products`
   );
 
   const { data, isLoading, error } = useSWR(fetchUrl, fetcher);
+
+  console.log(data);
 
   const handleSearchProduct = debounce(
     (e) =>
@@ -110,13 +118,13 @@ const ProductList = () => {
         </tbody>
       </table>
 
-      {!isLoading && (
+      {/* {!isLoading && (
         <Pagination
           links={data?.links}
           meta={data?.meta}
           updateFetchUrl={setFetchUrl}
         />
-      )}
+      )} */}
     </div>
   );
 };
