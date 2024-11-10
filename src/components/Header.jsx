@@ -5,7 +5,7 @@ import useUserStore from "../stores/useUserStore";
 
 const Header = () => {
   const { user } = useUserStore();
-  console.log(user);
+  // console.log(user);
   return (
     <header className=" text-start mb-5">
       <Container>

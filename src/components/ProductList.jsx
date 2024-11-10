@@ -5,7 +5,7 @@ import useSWR from "swr";
 import ProductSkeletonLoader from "./ProductSkeletonLoadr";
 import ProductEmptyState from "./ProductEmptyState";
 import ProductRow from "./ProductRow";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { debounce } from "lodash";
 import { HiX } from "react-icons/hi";
 import Pagination from "./Pagination";
@@ -14,33 +14,60 @@ import { useCookies } from "react-cookie";
 const ProductList = () => {
   const [token] = useCookies(["token"]);
   console.log("token", token.token);
+  const locatin = useLocation();
+  console.log("I m location", locatin);
+  const [params, setParams] = useSearchParams();
   const fetcher = (url) =>
     fetch(url, { headers: { Authorization: `Bearer ${token.token}` } }).then(
       (res) => res.json()
     );
   const serRef = useRef();
   const [fetchUrl, setFetchUrl] = useState(
-    `${import.meta.env.VITE_API_URL}/products`
+    `${import.meta.env.VITE_API_URL}/products${locatin.search}`
   );
 
   const { data, isLoading, error } = useSWR(fetchUrl, fetcher);
 
   console.log(data);
 
-  const handleSearchProduct = debounce(
-    (e) =>
+  // const handleSearchProduct = debounce(
+  //   (e) =>
+  //     setFetchUrl(
+  //       `${import.meta.env.VITE_API_URL}/products?q=${e.target.value}`
+  //     ),
+  //   500
+  // );
+
+  const handleSearchProduct = debounce((e) => {
+    console.log(e.target.value);
+    if (e.target.value) {
+      setParams({ q: e.target.value });
       setFetchUrl(
         `${import.meta.env.VITE_API_URL}/products?q=${e.target.value}`
-      ),
-    500
-  );
+      );
+    } else {
+      setParams({});
+      setFetchUrl(`${import.meta.env.VITE_API_URL}/products`);
+    }
+    // setSearch(e.target.value);
+  }, 500);
 
   const handleClear = () => {
     if (serRef.current) {
       serRef.current.value = "";
       serRef.current.focus();
       setFetchUrl(`${import.meta.env.VITE_API_URL}/products`);
+      setParams({});
     }
+  };
+
+  const updateFetchUrl = (url) => {
+    console.log(url);
+    const currentUrl = new URL(url);
+    const newSearchParams = new URLSearchParams(currentUrl.search);
+    const paramObject = Object.fromEntries(newSearchParams);
+    setParams(paramObject);
+    setFetchUrl(url);
   };
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -70,7 +97,7 @@ const ProductList = () => {
 
         <div>
           <Link
-            to="/products/create"
+            to="/dashboard/products/create"
             id="dropdownActionButton"
             data-dropdown-toggle="dropdownAction"
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 flex gap-2 items-center"
@@ -118,13 +145,13 @@ const ProductList = () => {
         </tbody>
       </table>
 
-      {/* {!isLoading && (
+      {!isLoading && (
         <Pagination
           links={data?.links}
           meta={data?.meta}
-          updateFetchUrl={setFetchUrl}
+          updateFetchUrl={updateFetchUrl}
         />
-      )} */}
+      )}
     </div>
   );
 };

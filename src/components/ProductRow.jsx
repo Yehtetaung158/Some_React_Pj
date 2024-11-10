@@ -5,6 +5,7 @@ import { pulsar } from "ldrs";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import useSWR, { useSWRConfig } from "swr";
+import { useCookies } from "react-cookie";
 
 pulsar.register();
 
@@ -12,6 +13,7 @@ const ProductRow = ({
   item: { id, product_name, price, created_at },
   index,
 }) => {
+  const [token] = useCookies(["token"]);
   const date = new Date(created_at);
   const optionsDate = { day: "numeric", month: "short", year: "numeric" };
   const optionsTime = { hour: "numeric", minute: "numeric", hour12: true };
@@ -25,7 +27,7 @@ const ProductRow = ({
   const handleDeleteBtn = async () => {
     setIsDeleting(true);
     const url = `${import.meta.env.VITE_API_URL}/products/${id}`;
-    const response = await fetch(url, { method: "DELETE" });
+    const response = await fetch(url, { method: "DELETE" , headers: { Authorization: `Bearer ${token.token}` } });
     if (response.status === 200) {
       const json = await response.json();
       toast.success(json.message);
@@ -55,7 +57,7 @@ const ProductRow = ({
         <td className="px-6 py-4">
           <div className="font-lg text-blue-600 dark:text-blue-500 hover:underline flex gap-1.5">
             <button
-              onClick={() => nav(`/products/edit/${id}`)}
+              onClick={() => nav(`/dashboard/products/edit/${id}`)}
               className="border text-lg size-8 flex justify-center items-center"
             >
               <PiPencil />

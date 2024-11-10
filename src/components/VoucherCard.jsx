@@ -1,12 +1,15 @@
 import  html2pdf  from "html2pdf.js";
 import printJS from "print-js";
 import React from "react";
+import { useCookies } from "react-cookie";
 import { useParams } from "react-router-dom";
 import useSWR from "swr";
 
 const VoucherCard = () => {
+  const [token] = useCookies(["token"]);
+  console.log(token);
   const { id } = useParams();
-  const fetcher = (url) => fetch(url).then((res) => res.json());
+  const fetcher = (url) => fetch(url,  { headers: { Authorization: `Bearer ${token.token}` } }).then((res) => res.json());
   const { data, isLoading, error } = useSWR(
     import.meta.env.VITE_API_URL + "/vouchers/" + id,
     fetcher

@@ -5,11 +5,14 @@ import { pulsar } from "ldrs";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { BiDetail } from "react-icons/bi";
+import { useCookies } from "react-cookie";
 
 pulsar.register();
 
 const VoucherRow = ({ item, index }) => {
   const navigate = useNavigate();
+  const [token] = useCookies(["token"]);
+  console.log("i am delete token", token.token);
   const id = item.id;
   const [isDeleting, setIsDeleting] = useState(false);
   const { mutate } = useSWRConfig();
@@ -18,12 +21,18 @@ const VoucherRow = ({ item, index }) => {
   const optionsTime = { hour: "numeric", minute: "numeric", hour12: true };
   const formattedDate = date.toLocaleDateString("en-GB", optionsDate);
   const formattedTime = date.toLocaleTimeString("en-GB", optionsTime);
-  console.log(item);
+  // console.log(item);
 
   const handleDeleteBtn = async () => {
     setIsDeleting(true);
     const url = `${import.meta.env.VITE_API_URL}/vouchers/${id}`;
-    const response = await fetch(url, { method: "DELETE" });
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token.token}`,
+      },
+    });
+    console.log(response);
     if (response.status === 200) {
       const json = await response.json();
       toast.success(json.message);
@@ -49,7 +58,7 @@ const VoucherRow = ({ item, index }) => {
         <td className="px-6 py-4">
           <div className="font-lg text-blue-600 dark:text-blue-500 hover:underline flex gap-1.5">
             <button
-              onClick={() => navigate(`/voucher/detail/${id}`)}
+              onClick={() => navigate(`detail/${id}`)}
               className="border text-lg text-blue-600 size-8 flex justify-center items-center"
             >
               <BiDetail />

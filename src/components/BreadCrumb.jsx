@@ -20,8 +20,10 @@ const BreadCrumb = ({ currentPage, links }) => {
           </li>
           {links &&
             links.map((i, index) => (
+              console.log(i.path),
               <Link
                 key={index}
+                
                 to={i.path}
                 className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white  gap-2"
               >

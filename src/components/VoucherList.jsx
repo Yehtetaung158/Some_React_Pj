@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa";
-import { MdDeleteOutline } from "react-icons/md";
-import { PiPencil } from "react-icons/pi";
+// import { MdDeleteOutline } from "react-icons/md";
+// import { PiPencil } from "react-icons/pi";
 import useSWR from "swr";
 import VoucherRow from "./VoucherRow";
 import ProductSkeletonLoader from "./ProductSkeletonLoadr";
@@ -10,17 +10,37 @@ import ProductEmptyState from "./ProductEmptyState";
 import { debounce } from "lodash";
 import { HiX } from "react-icons/hi";
 import Pagination from "./Pagination";
+import { useCookies } from "react-cookie";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 const VoucherList = () => {
   const searchVoucher = useRef();
+  const [token] = useCookies(["token"]);
+  const location = useLocation();
+  const [params, setParams] = useSearchParams();
   const [fetchUrl, setFetchUrl] = useState(
-    `${import.meta.env.VITE_API_URL}/vouchers`
+    `${import.meta.env.VITE_API_URL}/vouchers${location.search}`
   );
+  // const handleVoucherSearch = debounce((e) => {
+  //   setParams({ q: e.target.value });
+  //   setFetchUrl(`${import.meta.env.VITE_API_URL}/vouchers?q=${e.target.value}`);
+  // }, 500);
+
   const handleVoucherSearch = debounce((e) => {
-    setFetchUrl(`${import.meta.env.VITE_API_URL}/vouchers?q=${e.target.value}`);
+    // console.log(e.target.value);
+    if (e.target.value) {
+      setParams({ q: e.target.value });
+      setFetchUrl(
+        `${import.meta.env.VITE_API_URL}/vouchers?q=${e.target.value}`
+      );
+    } else {
+      setParams({});
+      setFetchUrl(`${import.meta.env.VITE_API_URL}/vouchers`);
+    }
+    // setSearch(e.target.value);
   }, 500);
 
-  const fetcher = (url) => fetch(url).then((res) => res.json());
+  const fetcher = (url) => fetch(url, { headers: { Authorization: `Bearer ${token.token}` } }).then((res) => res.json());
   const { data, isLoading, error } = useSWR(fetchUrl, fetcher);
   console.log(data);
 
@@ -30,6 +50,15 @@ const VoucherList = () => {
       searchVoucher.current.focus();
       setFetchUrl(`${import.meta.env.VITE_API_URL}/vouchers`);
     }
+  };
+
+  const updateFetchUrl = (url) => {
+    console.log(url);
+    const currentUrl = new URL(url);
+    const newSearchParams = new URLSearchParams(currentUrl.search);
+    const paramObject = Object.fromEntries(newSearchParams);
+    setParams(paramObject);
+    setFetchUrl(url);
   };
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -110,7 +139,7 @@ const VoucherList = () => {
         <Pagination
           links={data?.links}
           meta={data?.meta}
-          updateFetchUrl={setFetchUrl}
+          updateFetchUrl={updateFetchUrl}
         />
       )}
     </div>

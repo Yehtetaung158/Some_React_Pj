@@ -8,8 +8,10 @@ import { MdDelete } from "react-icons/md";
 import { FaPlus, FaSpinner } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa6";
 import toast from "react-hot-toast";
+import { useCookies } from "react-cookie";
 
 const VoucherInfo = () => {
+  const [token] = useCookies(["token"]);
   const { records, isLoading, removeRecord, changeRecordQuantity, mutate } =
     useRecordStore();
 
@@ -77,6 +79,7 @@ const VoucherInfo = () => {
       method: "POST",
       body: JSON.stringify(currentVoucher),
       headers: {
+        Authorization: `Bearer ${token.token}`,
         "Content-Type": "application/json",
         "Accept": "application/json",
       },
@@ -227,7 +230,7 @@ const VoucherInfo = () => {
           </div>
         </div>
       </form>
-      <SaleForm />
+      <SaleForm token={token} />
 
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -298,7 +301,7 @@ const VoucherInfo = () => {
                 >
                   <MdDelete className=" size-6 text-red-600 hover:text-red-800 " />
                 </td>
-                <td className="px-6 py-4">${record.price * record.quantity}</td>
+                <td className="px-6 py-4">${parseInt(record.product.price) * parseInt(record.quantity)}</td>
               </tr>
             ))
           )}

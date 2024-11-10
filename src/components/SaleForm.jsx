@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import useRecordStore from "../stores/userRecordStore";
 import useSWR from "swr";
 
-const SaleForm = () => {
+const SaleForm = ({token}) => {
   const { addRecord, records } = useRecordStore();
   const {
     register,
@@ -37,7 +37,7 @@ const SaleForm = () => {
   //   return records.some((record) => record.product_id === id);
   // };
 
-  const fetcher = (url) => fetch(url).then((res) => res.json());
+  const fetcher = (url) => fetch(url, { headers: { Authorization: `Bearer ${token.token}` } }).then((res) => res.json());
 
   const { data, error, isLoading } = useSWR(
     `${import.meta.env.VITE_API_URL}/products`,

@@ -31,7 +31,7 @@ const router = createBrowserRouter([
       {
         path: "dashboard",
         element: <Layoud />,
-        errorElement: <NotFoundPage />,
+        // errorElement: <NotFoundPage />,
         children: [
           {
             index: true,

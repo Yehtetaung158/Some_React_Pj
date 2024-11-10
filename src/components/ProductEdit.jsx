@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import useSWR from "swr";
 import PuductEditLoader from "./PuductEditLoader";
+import { useCookies } from "react-cookie";
 
 pulsar.register();
 
@@ -13,6 +14,7 @@ const ProductEdit = ({ id }) => {
   const notify = () => toast.success("Product Upadate is successfully");
   const [isSending, setIsSending] = useState(false);
   const nav = useNavigate();
+  const [token] = useCookies(["token"]);
   const {
     register,
     handleSubmit,
@@ -20,7 +22,7 @@ const ProductEdit = ({ id }) => {
     reset,
   } = useForm();
 
-  const fetcher = (url) => fetch(url).then((res) => res.json());
+  const fetcher = (url) => fetch(url, { headers: { Authorization: `Bearer ${token.token}` } }).then((res) => res.json());
   const { data, error, isLoading } = useSWR(
     `${import.meta.env.VITE_API_URL}/products/${id}`,
     fetcher
@@ -31,19 +33,20 @@ const ProductEdit = ({ id }) => {
     setIsSending(true);
     await fetch(import.meta.env.VITE_API_URL + "/products/" + id, {
       method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token.token}`,
+      },
       body: JSON.stringify({
         product_name: data.product_name,
         price: data.price,
         create_at: new Date().toISOString(),
       }),
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
     reset();
     setIsSending(false);
     notify();
-    nav("/products");
+    nav("/dashboard/products");
   };
 
   return (

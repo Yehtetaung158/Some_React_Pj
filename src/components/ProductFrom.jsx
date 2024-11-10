@@ -3,12 +3,14 @@ import { useForm } from "react-hook-form";
 import { pulsar } from "ldrs";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 pulsar.register();
 
 const ProductFrom = () => {
   const notify = () => toast.success("Product is seved");
   const [isSending, setIsSending] = useState(false);
+  const [token] = useCookies(["token"]);
   const nav = useNavigate();
   const {
     register,
@@ -28,13 +30,14 @@ const ProductFrom = () => {
       }),
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token.token}`,
       },
     });
     reset();
     setIsSending(false);
     notify();
     if (data.back) {
-      nav("/products");
+      nav("/dashboard/products");
     }
   };
 
